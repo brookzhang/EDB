@@ -10,6 +10,7 @@
     :include_cluster: true
     :only_tables:    []
     :exclude_tables: ['trash_table']
+    :run_sql_before_backup: ~/Documents/backup_tables.sql
     :run_sql_after_backup: ~/Documents/clear_tables.sql
 
   :MySQL:

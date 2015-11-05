@@ -43,6 +43,15 @@ module EDB
             exclude_tables = db[:exclude_tables].map{|t| "-T #{t}" }.join(" ")
           end
 
+          
+
+          if db[:run_sql_before_backup] && File.exists?(db[:run_sql_before_backup])
+            ::EDB::Logger.log(:info, "Executing #{File.basename(db[:run_sql_before_backup])}...")
+            
+            psql = db[:binpath] && !db[:binpath].empty? ? File.join(db[:binpath], 'psql') : 'psql'
+            Kernel.system "PGPASSWORD='#{db[:password]}' #{psql} -h #{db[:host]} -p #{db[:port]} -U #{db[:username]} -d #{db[:database]} -f #{db[:run_sql_before_backup]}"
+          end
+
 
           ::EDB::Logger.log(:info, "Dumping #{db[:database]}...")
 
